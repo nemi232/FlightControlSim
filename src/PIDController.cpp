@@ -1,0 +1,17 @@
+#include "PIDController.hpp"
+
+PIDController::PIDController(double kp, double ki, double kd, double dt)
+    : kp_(kp), ki_(ki), kd_(kd), dt_(dt), integral_(0.0), prev_error_(0.0) {}
+
+double PIDController::update(double setpoint, double measurement) {
+    double error = setpoint - measurement;
+    integral_ += error * dt_;
+    double derivative = (error - prev_error_) / dt_;
+    prev_error_ = error;
+    return kp_ * error + ki_ * integral_ + kd_ * derivative;
+}
+
+void PIDController::reset() {
+    integral_ = 0.0;
+    prev_error_ = 0.0;
+}
